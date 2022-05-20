@@ -12,26 +12,29 @@ namespace FilmesApi.Controllers
         public static int count = 0;
 
         [HttpGet]
-        public List<Filme> ListaFilmes()
+        public IActionResult ListaFilmes()
         {
-            return filmes;
+            return filmes.Count > 0 ? Ok(filmes) : NoContent();
         }
 
         [HttpPost]
-        public Filme AdicionarFilme([FromBody] Filme filme)
+        public IActionResult AdicionarFilme([FromBody] Filme filme)
         {
             count++;
             filme.Id = count; 
             filmes.Add(filme);
 
-            return filme;
+            return CreatedAtAction(nameof(BuscarFilme), new { Id = filme.Id }, filme);
 
         }
 
         [HttpGet("{id}")]
-        public Filme BuscarFilme(int id)
+        public IActionResult BuscarFilme(int id)
         {
-            return filmes.FirstOrDefault(filme => filme.Id == id);
+            Filme filme = filmes.FirstOrDefault(filme => filme.Id == id);
+
+            return filme == null ? NotFound() : Ok(filme);
+
         }
 
     }
