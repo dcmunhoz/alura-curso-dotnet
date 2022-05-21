@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Oracle.EntityFrameworkCore;
+using FilmesApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddDbContext<OracleDbContext>(opt => 
+    opt.UseOracle(builder.Configuration.GetConnectionString("OracleContext")));
 
 var app = builder.Build();
 
