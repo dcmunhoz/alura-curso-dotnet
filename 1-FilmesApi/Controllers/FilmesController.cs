@@ -2,6 +2,7 @@
 using FilmesApi.Models;
 using Microsoft.EntityFrameworkCore;
 using FilmesApi.Data;
+using FilmesApi.Data.DTOs;
 
 namespace FilmesApi.Controllers
 {
@@ -23,12 +24,36 @@ namespace FilmesApi.Controllers
         [HttpGet]
         public IActionResult ListaFilmes()
         {
-            return Ok(_context.Filmes.ToList<Filme>());
+            List<ReadFilmeDto> filmesDto = new();
+
+            var filmes = _context.Filmes.ToList<Filme>();
+
+            foreach (Filme filme in filmes)
+            {
+                filmesDto.Add( new ReadFilmeDto()
+                {
+                    Titulo = filme.Titulo,
+                    Descricao = filme.Descricao,
+                    Diretor = filme.Diretor,
+                    Duracao = filme.Duracao,
+                    DataConsulta = DateTime.Now
+                });
+            }
+
+            return Ok(filmesDto);
         }
 
         [HttpPost]
-        public IActionResult AdicionarFilme([FromBody] Filme filme)
+        public IActionResult AdicionarFilme([FromBody] CreateFilmeDto filmeDto)
         {
+            Filme filme = new()
+            {
+               Titulo = filmeDto.Titulo,
+               Descricao = filmeDto.Descricao,
+               Diretor = filmeDto.Diretor,
+               Duracao = filmeDto.Duracao,  
+            };
+
             _context.Filmes.Add(filme);
             _context.SaveChanges();
 
@@ -40,12 +65,23 @@ namespace FilmesApi.Controllers
         {
             Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
 
-            return filme == null ? NotFound() : Ok(filme);
+            if (filme == null) return NotFound(); 
+
+            ReadFilmeDto filmeDto = new ReadFilmeDto()
+            {
+                Titulo = filme.Titulo,
+                Descricao = filme.Descricao,
+                Diretor = filme.Diretor,
+                Duracao = filme.Duracao,
+                DataConsulta = DateTime.Now
+            };
+
+            return Ok(filmeDto);
 
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> AlterarFilme(int id, [FromBody] Filme novoFilme)
+        public async Task<IActionResult> AlterarFilme(int id, [FromBody] UpdateFilmeDto novoFilme)
         {
 
             Filme filme = await _context.Filmes.FirstOrDefaultAsync(filme => filme.Id == id);
