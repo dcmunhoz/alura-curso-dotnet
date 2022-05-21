@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Oracle.EntityFrameworkCore;
 using FilmesApi.Data;
+using AutoMapper;
+using FilmesApi.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<OracleDbContext>(opt => 
     opt.UseOracle(builder.Configuration.GetConnectionString("OracleContext")));
+
+builder.Services.AddAutoMapper(config => 
+    config.AddProfile<FilmeProfile>());
 
 var app = builder.Build();
 

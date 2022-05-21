@@ -3,6 +3,7 @@ using FilmesApi.Models;
 using Microsoft.EntityFrameworkCore;
 using FilmesApi.Data;
 using FilmesApi.Data.DTOs;
+using AutoMapper;
 
 namespace FilmesApi.Controllers
 {
@@ -14,11 +15,13 @@ namespace FilmesApi.Controllers
         public static List<Filme> filmes = new();
         public static int count = 0;
 
-        private OracleDbContext _context; 
+        private OracleDbContext _context;
+        private IMapper _mapper;
 
-        public FilmesController(OracleDbContext context)
+        public FilmesController(OracleDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -30,14 +33,7 @@ namespace FilmesApi.Controllers
 
             foreach (Filme filme in filmes)
             {
-                filmesDto.Add( new ReadFilmeDto()
-                {
-                    Titulo = filme.Titulo,
-                    Descricao = filme.Descricao,
-                    Diretor = filme.Diretor,
-                    Duracao = filme.Duracao,
-                    DataConsulta = DateTime.Now
-                });
+                filmesDto.Add( _mapper.Map<ReadFilmeDto>(filme));
             }
 
             return Ok(filmesDto);
@@ -46,13 +42,7 @@ namespace FilmesApi.Controllers
         [HttpPost]
         public IActionResult AdicionarFilme([FromBody] CreateFilmeDto filmeDto)
         {
-            Filme filme = new()
-            {
-               Titulo = filmeDto.Titulo,
-               Descricao = filmeDto.Descricao,
-               Diretor = filmeDto.Diretor,
-               Duracao = filmeDto.Duracao,  
-            };
+            Filme filme = _mapper.Map<Filme>(filmeDto);
 
             _context.Filmes.Add(filme);
             _context.SaveChanges();
@@ -67,14 +57,7 @@ namespace FilmesApi.Controllers
 
             if (filme == null) return NotFound(); 
 
-            ReadFilmeDto filmeDto = new ReadFilmeDto()
-            {
-                Titulo = filme.Titulo,
-                Descricao = filme.Descricao,
-                Diretor = filme.Diretor,
-                Duracao = filme.Duracao,
-                DataConsulta = DateTime.Now
-            };
+            ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
 
             return Ok(filmeDto);
 
@@ -88,11 +71,7 @@ namespace FilmesApi.Controllers
 
             if (filme == null) return NotFound();
 
-            filme.Titulo = novoFilme.Titulo;
-            filme.Descricao = novoFilme.Descricao;
-            filme.Diretor = novoFilme.Diretor;
-            filme.Duracao = novoFilme.Duracao;
-
+            _mapper.Map(novoFilme, filme);
             _context.SaveChanges();
 
             return Ok(filme);
