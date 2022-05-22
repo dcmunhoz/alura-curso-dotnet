@@ -17,8 +17,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<OracleDbContext>(opt => 
     opt.UseOracle(builder.Configuration.GetConnectionString("OracleContext")));
 
-builder.Services.AddAutoMapper(config => 
-    config.AddProfile<FilmeProfile>());
+builder.Services.AddAutoMapper(config => {
+    config.AddProfile<FilmeProfile>();
+    config.AddProfile<CinemaProfile>(); 
+ });
 
 var app = builder.Build();
 

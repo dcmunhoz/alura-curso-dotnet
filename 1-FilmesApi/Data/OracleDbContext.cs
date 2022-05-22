@@ -9,7 +9,7 @@ namespace FilmesApi.Data
         public OracleDbContext(DbContextOptions opt) : base(opt) { }
 
         public DbSet<Filme> Filmes { get; set; }
-
+        public DbSet<Cinema> Cinemas { get; set; }
 
     }
 }
