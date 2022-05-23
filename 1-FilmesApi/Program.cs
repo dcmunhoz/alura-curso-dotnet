@@ -19,7 +19,8 @@ builder.Services.AddDbContext<OracleDbContext>(opt =>
 
 builder.Services.AddAutoMapper(config => {
     config.AddProfile<FilmeProfile>();
-    config.AddProfile<CinemaProfile>(); 
+    config.AddProfile<CinemaProfile>();
+    config.AddProfile<EnderecoProfile>();
  });
 
 var app = builder.Build();
