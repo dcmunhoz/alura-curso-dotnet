@@ -44,6 +44,24 @@ namespace FilmesApi.Controllers
         {
             Cinema cinema = _context.Cinemas.FirstOrDefault<Cinema>(cinema => cinema.Id == id);
 
+            ////Utilizando Join
+            //Cinema cinema = new Cinema();
+            //var quey = from c in _context.Cinemas
+            //                join e in _context.Enderecos on c.EnderecoId equals e.Id
+            //                where c.Id == id
+            //                select new Cinema()
+            //                {
+            //                    Id = c.Id,
+            //                    Nome = c.Nome,
+            //                    Endereco = e,
+            //                    EnderecoId = e.Id
+            //                };
+
+            //foreach ( Cinema c in quey )
+            //{
+            //    cinema = c;
+            //}
+
             if (cinema == null) return NotFound();
 
             var cinemaDto = _mapper.Map<ReadCinemaDTO>(cinema);

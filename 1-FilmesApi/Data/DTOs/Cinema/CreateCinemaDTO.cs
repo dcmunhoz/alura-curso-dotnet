@@ -6,5 +6,6 @@ namespace FilmesApi.Data.DTOs
     {
         [Required(ErrorMessage = "O campo 'Nome' deve ser preenchido.")]
         public string Nome { get; set; }
+        public int EnderecoId { get; set; }
     }
 }

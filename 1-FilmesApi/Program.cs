@@ -14,8 +14,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<OracleDbContext>(opt => 
-    opt.UseOracle(builder.Configuration.GetConnectionString("OracleContext")));
+builder.Services.AddDbContext<OracleDbContext>(opt => opt
+    .UseLazyLoadingProxies()
+    .UseOracle(builder.Configuration.GetConnectionString("OracleContext")));
 
 builder.Services.AddAutoMapper(config => {
     config.AddProfile<FilmeProfile>();
