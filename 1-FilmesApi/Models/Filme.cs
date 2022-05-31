@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FilmesApi.Models
 {
@@ -21,6 +22,8 @@ namespace FilmesApi.Models
         [Range(1, 999)]
         [Column("DURACAO")]
         public int Duracao { get; set; }
+        [JsonIgnore]
+        public virtual List<Sessao> Sessoes { get; set; }
 
 
     }

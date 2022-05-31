@@ -23,6 +23,7 @@ builder.Services.AddAutoMapper(config => {
     config.AddProfile<CinemaProfile>();
     config.AddProfile<EnderecoProfile>();
     config.AddProfile<GerenteProfile>();
+    config.AddProfile<SessaoProfile>();
  });
 
 var app = builder.Build();

@@ -25,11 +25,16 @@ namespace FilmesApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListaFilmes()
+        public IActionResult ListaFilmes([FromQuery] int? duracao = null)
         {
             List<ReadFilmeDto> filmesDto = new();
 
             var filmes = _context.Filmes.ToList<Filme>();
+
+            if (duracao != null)
+            {
+                filmes = filmes.Where(f => f.Duracao <= duracao).ToList();
+            }
 
             foreach (Filme filme in filmes)
             {
